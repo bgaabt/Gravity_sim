@@ -1,5 +1,5 @@
 import pygame
-from planet import Planet, calc_gravitation
+from planet import Planet, calc_gravity
 
 pygame.init()
 
@@ -8,10 +8,14 @@ RESOLUTION = (1280, 720)
 # colours
 YELLOW = (255, 255, 0)
 NEBULA_BLUE = (84, 104, 255)
+MAGENTA = (255,0,255)
 
 # planets
-SUN = Planet(1000, 640, 360, 25, YELLOW, fix=True)
+SUN = Planet(500, 640, 360, 25, YELLOW, fix=True)
 EARTH = Planet(100, 640, 130, 10, (0, 0, 255), velx=1)
+PLUTO = Planet(100, 320, 360, 10, MAGENTA, vely=1)
+
+galaxy = [SUN, EARTH, PLUTO]
 
 screen = pygame.display.set_mode(RESOLUTION)
 clock = pygame.time.Clock()
@@ -31,22 +35,12 @@ while game:
 
     screen.fill(NEBULA_BLUE)
 
-
-    # TODO: make a funktion for this
-    # find all "zweipärchen" use itertools
-    force_x, force_y = calc_gravitation((SUN.xcor, SUN.ycor), (EARTH.xcor, EARTH.ycor), SUN.mass, EARTH.mass)
-    ax_sun = -force_x / SUN.mass
-    ay_sun = -force_y / SUN.mass
-    ax_earth = force_x / EARTH.mass
-    ay_earth = force_y / EARTH.mass
-    SUN.velx += ax_sun
-    SUN.vely += ay_sun
-    EARTH.velx += ax_earth
-    EARTH.vely += ay_earth
+    calc_gravity(galaxy)
 
     # TODO: make planet spawn on click location
     SUN.draw_planet(screen)
     EARTH.draw_planet(screen)
+    PLUTO.draw_planet(screen)
 
     pygame.display.flip()
 
