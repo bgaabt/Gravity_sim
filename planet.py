@@ -41,29 +41,20 @@ def calc_force(location1, location2, mass1, mass2):
     return force_x, force_y
 
 def calc_gravity(galaxy):
-    counter_a = 0
-    counter_b = 1
-    num_planets = len(galaxy)
 
-    for i in range(len(list(combinations(galaxy, 2)))):
+    for body_a, body_b in combinations(galaxy, 2):
 
         force_x, force_y = calc_force(
-            (galaxy[counter_a].xcor, galaxy[counter_a].ycor),
-            (galaxy[counter_b].xcor, galaxy[counter_b].ycor),
-            galaxy[counter_a].mass, galaxy[counter_b].mass)
+            (body_a.xcor, body_a.ycor),
+            (body_b.xcor, body_b.ycor),
+            body_a.mass, body_b.mass)
         
-        ax_p1 = -force_x / galaxy[counter_a].mass
-        ay_p1 = -force_y / galaxy[counter_a].mass
-        ax_p2 = force_x / galaxy[counter_b].mass
-        ay_p2 = force_y / galaxy[counter_b].mass
+        ax_p1 = -force_x / body_a.mass
+        ay_p1 = -force_y / body_a.mass
+        ax_p2 = force_x / body_b.mass
+        ay_p2 = force_y / body_b.mass
 
-        galaxy[counter_a].velx += ax_p1
-        galaxy[counter_b].vely += ay_p1
-        galaxy[counter_b].velx += ax_p2
-        galaxy[counter_b].vely += ay_p2
-
-        counter_b += 1
-        if num_planets == counter_b:
-            counter_a += 1
-            counter_b = counter_a + 1
-    
+        body_a.velx += ax_p1
+        body_a.vely += ay_p1
+        body_b.velx += ax_p2
+        body_b.vely += ay_p2
